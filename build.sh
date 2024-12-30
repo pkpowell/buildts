@@ -1,21 +1,38 @@
 #!/bin/bash
 
-if [ ! -d "./tailscale" ]; 
+if [ ! -d "./tailscale" ]; then
     git clone https://github.com/tailscale/tailscale.git tailscale
-else 
-    git -C ./tailscale pull origin main
 fi
 
-sh ./tailscale/build_dist.sh tailscale.com/cmd/tailscaled && {
-    echo "tailscale.com/cmd/tailscaled ok"
+cd ./tailscale
+
+if [ $1 ]; then
+    echo "switching to branch $1"
+    git switch $1
+else
+    git switch main
+fi
+
+git pull
+
+sh ./build_dist.sh tailscale.com/cmd/tailscaled && {
+    echo "tailscaled build ok"
 } || {
     echo "build tailscale.com/cmd/tailscaled failed"
     exit $?
 }
 
-sh ./tailscale/build_dist.sh tailscale.com/cmd/tailscale && {
-    echo "tailscale.com/cmd/tailscale ok"
+sh ./build_dist.sh tailscale.com/cmd/tailscale && {
+    echo "tailscale build ok"
 } || {
     echo "build tailscale.com/cmd/tailscale failed"
     exit $?
 }
+
+ln -sf $PWD/tailscale* /usr/local/bin/
+
+sudo launchctl kickstart -k system/tailscaled
+tailscale version
+
+echo ""
+echo "Done"
