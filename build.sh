@@ -1,9 +1,21 @@
 #!/bin/bash
+default_branch="main"
+default_service="system/com.tailscale.tailscaled"
 
-if [ $1 ]; then
+# echo "checking if $1 exists"
+if test -f "$1"; then
+    # echo "$1 exists"
     source $1
 else
-    source config
+    source defaultconf
+fi
+
+if [[ -z $branch ]]; then 
+    branch=$default_branch
+fi
+
+if [[ -z $service ]]; then 
+    service=$default_service
 fi
 
 echo "branch $branch"
@@ -16,7 +28,7 @@ fi
 cd ./tailscale
 
 if [ $branch ]; then
-    echo "switching to branch $1"
+    echo "switching to branch $branch"
     git switch $branch
 else
     git switch main
