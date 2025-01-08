@@ -1,0 +1,4 @@
+#!/bin/bash
+
+branch="main"
+service="system/com.tailscale.tailscaled"

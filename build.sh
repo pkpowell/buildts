@@ -1,14 +1,23 @@
 #!/bin/bash
 
+if [ $1 ]; then
+    source $1
+else
+    source config
+fi
+
+echo "branch $branch"
+echo "service $service"
+
 if [ ! -d "./tailscale" ]; then
     git clone https://github.com/tailscale/tailscale.git tailscale
 fi
 
 cd ./tailscale
 
-if [ $1 ]; then
+if [ $branch ]; then
     echo "switching to branch $1"
-    git switch $1
+    git switch $branch
 else
     git switch main
 fi
@@ -31,7 +40,7 @@ sh ./build_dist.sh tailscale.com/cmd/tailscale && {
 
 ln -sf $PWD/tailscale* /usr/local/bin/
 
-sudo launchctl kickstart -k system/tailscaled
+sudo launchctl kickstart -k $service
 tailscale version
 
 echo ""
