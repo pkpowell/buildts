@@ -22,23 +22,25 @@ if [[ -z $service ]]; then
     service=$default_service
 fi
 
-echo "branch $branch"
-echo "service $service"
+# echo "branch $branch"
+# echo "service $service"
 
 if [ ! -d "./tailscale" ]; then
-    git clone https://github.com/tailscale/tailscale.git tailscale
+    echo "Cloning repo"
+    git clone https://github.com/tailscale/tailscale.git tailscale > /dev/null 2>&1
 fi
 
 cd ./tailscale
 
 if [ $branch ]; then
     echo "switching to branch $branch"
-    git switch $branch
+    git switch $branch > /dev/null 2>&1
 else
-    git switch main
+    git switch main > /dev/null 2>&1
 fi
 
-git pull
+echo "Pulling repo changes"
+git pull > /dev/null 2>&1
 
 sh ./build_dist.sh tailscale.com/cmd/tailscaled && {
     echo "tailscaled build ok"
@@ -54,9 +56,12 @@ sh ./build_dist.sh tailscale.com/cmd/tailscale && {
     exit $?
 }
 
+echo "Linking taiscale binaries to /usr/local/bin/"
 ln -sf $PWD/tailscale* /usr/local/bin/
 
+echo "Restarting taiscaled service $service"
 sudo launchctl kickstart -k $service
+
 tailscale version
 
 echo ""
