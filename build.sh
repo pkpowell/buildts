@@ -14,6 +14,10 @@ if [[ -z $branch ]]; then
     branch=$default_branch
 fi
 
+if [[ -f "service_name" ]]; then 
+    source service_name
+fi
+
 if [[ -z $service ]]; then 
     service=$default_service
 fi
