@@ -33,7 +33,7 @@ fi
 cd ./tailscale
 
 if [ $branch ]; then
-    echo "switching to branch $branch"
+    echo "Switching to branch $branch"
     git switch $branch > /dev/null 2>&1
 else
     git switch main > /dev/null 2>&1
