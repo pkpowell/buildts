@@ -15,7 +15,7 @@ if [[ -z $branch ]]; then
 fi
 
 if [[ -f "service_name" ]]; then 
-    source service_name
+    source service_name.sh
 fi
 
 if [[ -z $service ]]; then 
