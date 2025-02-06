@@ -62,7 +62,7 @@ ln -sf $PWD/tailscale* /usr/local/bin/
 echo "Restarting taiscaled service $service"
 sudo launchctl kickstart -k $service
 
-tailscale version
+# tailscale version
 
 echo ""
 echo "Done"
