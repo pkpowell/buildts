@@ -14,7 +14,7 @@ if [[ -z $branch ]]; then
     branch=$default_branch
 fi
 
-if [[ -f "service" ]]; then 
+if [[ -f "service.sh" ]]; then 
     source service.sh
 fi
 
