@@ -4,5 +4,5 @@ tailscale/
 tailscale/tailscale
 tailscale/tailscaled
 
-service_name
-service_name.sh
+service
+service.sh
