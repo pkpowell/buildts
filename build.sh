@@ -10,15 +10,15 @@ else
     source defaultconf
 fi
 
-if [[ -z $branch ]]; then 
+if [[ -z $branch ]]; then
     branch=$default_branch
 fi
 
-if [[ -f "service.sh" ]]; then 
+if [[ -f "service.sh" ]]; then
     source service.sh
 fi
 
-if [[ -z $service ]]; then 
+if [[ -z $service ]]; then
     service=$default_service
 fi
 
@@ -42,14 +42,14 @@ fi
 echo "Pulling repo changes"
 git pull > /dev/null 2>&1
 
-sh ./build_dist.sh tailscale.com/cmd/tailscaled && {
+sh ./build_dist.sh --extra-small tailscale.com/cmd/tailscaled && {
     echo "tailscaled build ok"
 } || {
     echo "build tailscale.com/cmd/tailscaled failed"
     exit $?
 }
 
-sh ./build_dist.sh tailscale.com/cmd/tailscale && {
+sh ./build_dist.sh --extra-small tailscale.com/cmd/tailscale && {
     echo "tailscale build ok"
 } || {
     echo "build tailscale.com/cmd/tailscale failed"
