@@ -2,6 +2,9 @@
 default_branch="main"
 default_service="system/com.tailscale.tailscaled"
 
+current_version=$(tailscale version)
+echo "Current version: $current_version"
+
 # echo "checking if $1 exists"
 if test -f "$1"; then
     # echo "$1 exists"

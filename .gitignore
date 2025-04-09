@@ -3,5 +3,6 @@
 tailscale/
 tailscale/tailscale
 tailscale/tailscaled
+repo/
 
 service.sh
