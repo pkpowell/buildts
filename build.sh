@@ -45,19 +45,47 @@ fi
 echo "Pulling repo changes"
 git pull > /dev/null 2>&1
 
+export GOOS=darwin
+export CGO_ENABLED=0
+
+export GOARCH=amd64
 sh ./build_dist.sh --extra-small tailscale.com/cmd/tailscaled && {
-    echo "tailscaled build ok"
+    echo "tailscaled amd build ok"
 } || {
     echo "build tailscale.com/cmd/tailscaled failed"
     exit $?
 }
 
 sh ./build_dist.sh --extra-small tailscale.com/cmd/tailscale && {
-    echo "tailscale build ok"
+    echo "tailscale amd build ok"
 } || {
     echo "build tailscale.com/cmd/tailscale failed"
     exit $?
 }
+
+mv tailscale tailscale-amd
+mv tailscaled tailscaled-amd
+
+export GOARCH=arm64
+sh ./build_dist.sh --extra-small tailscale.com/cmd/tailscaled && {
+    echo "tailscaled arm build ok"
+} || {
+    echo "build tailscale.com/cmd/tailscaled failed"
+    exit $?
+}
+
+sh ./build_dist.sh --extra-small tailscale.com/cmd/tailscale && {
+    echo "tailscale arm build ok"
+} || {
+    echo "build tailscale.com/cmd/tailscale failed"
+    exit $?
+}
+
+mv tailscale tailscale-arm
+mv tailscaled tailscaled-arm
+
+lipo -create tailscale-amd tailscale-arm -output tailscale
+lipo -create tailscaled-amd tailscaled-arm -output tailscaled
 
 echo "Linking taiscale binaries to /usr/local/bin/"
 ln -sf $PWD/tailscale* /usr/local/bin/
